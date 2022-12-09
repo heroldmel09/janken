@@ -21,21 +21,23 @@ janken = [image1, image2, image3]
 clock = pygame.time.Clock()
 
 
-class Animetion(pygame.sprite.Sprite):
+class Animation(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.locx = 200
         self.locy = 200
-        self.time = 10
+        self.time = 3
+        self.speed = 0.30 / len(janken)
+        self.start = time.time()
 
     def render(self):
-        while self.time:
+        while time.time() - self.start < self.time:
             self.rand_pic = random.choice(janken)
+            # screen display
             display.blit(self.rand_pic, (self.locx, self.locy))
             pygame.display.update()
-            time.sleep(1)
-            self.time -= 1
-
+            time.sleep(self.speed)
+        self.rand_pic
 
 animetion = Animetion()
 while True:
