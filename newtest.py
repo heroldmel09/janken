@@ -17,7 +17,7 @@ image3 = pygame.image.load("scisso.png")
 image1 = pygame.transform.scale(image1, (200, 200))
 image2 = pygame.transform.scale(image2, (200, 200))
 image3 = pygame.transform.scale(image3, (200, 200))
-janken = [image1, image2, image3]
+janken = {"paper": image1, "rock": image2, "scissor": image3}
 clock = pygame.time.Clock()
 
 
@@ -32,14 +32,14 @@ class Animation(pygame.sprite.Sprite):
 
     def render(self):
         while time.time() - self.start < self.time:
-            self.rand_pic = random.choice(janken)
+            self.key, self.value = random.choice(list(janken.items()))
             # screen display
-            display.blit(self.rand_pic, (self.locx, self.locy))
+            display.blit(self.value, (self.locx, self.locy))
             pygame.display.update()
-            time.sleep(self.speed)
-        self.rand_pic
+        return print(self.key)
 
-animetion = Animetion()
+
+animation = Animation()
 while True:
 
     for event in pygame.event.get():
@@ -47,6 +47,6 @@ while True:
             pygame.quit()
             sys.exit()
 
-    animetion.render()
+    animation.render()
     pygame.display.update()
     clock.tick(60)
