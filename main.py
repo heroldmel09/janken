@@ -51,6 +51,7 @@ class Animation(pygame.sprite.Sprite):
             self.key, self.value = random.choice(list(janken.items()))
             # screen display
             display.blit(self.value, (self.locx, self.locy))
+            time.sleep(self.speed)
             pygame.display.update()
         return self.key
 
@@ -105,7 +106,7 @@ class Animation(pygame.sprite.Sprite):
                     (255, 255, 255),
                     2,
                 )
-                return labels[index]
+
                 cv2.rectangle(
                     imgOutput,
                     (x - offset, y - offset),
@@ -113,44 +114,60 @@ class Animation(pygame.sprite.Sprite):
                     (255, 0, 255),
                     4,
                 )
-            if time.time() - self.start < self.time:
-                break
+                if time.time() - self.start < self.time:
+                    break
+                return labels[index]
 
 
 animation = Animation()
+user = animation.user()
+com = animation.render()
+
+
+class Result(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        pass
+
+    def janken(self, user, com):
+        if user == com:
+            print("It's a tie!")
+        elif user == "rock":
+            if com == "paper":
+                score[1] += 1
+                print("Computer Wins!")
+            elif com == "scissor":
+                score[0] += 1
+                print("You Win!")
+        elif user == "paper":
+            if com == "rock":
+                score[0] += 1
+                print("You Win!")
+            elif com == "scissor":
+                score[1] += 1
+                print("Computer Wins!")
+        elif user == "scissor":
+            if com == "rock":
+                score[1] += 1
+                print("Computer Wins!")
+            elif com == "paper":
+                score[0] += 1
+                print("You Win!")
+
+
+print("computer: ", animation.render())
+print("user: ", animation.user())
+result = Result()
 score = [0, 0]
 while True:
-    print("computer" + animation.render())
-    print("user" + animation.user())
-    user = animation.user()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        if user == animation.render():
-            print("It's a tie!")
-        elif user == "rock":
-            if animation.render() == "paper":
-                score[1] += 1
-                print("Computer Wins!")
-            elif animation.render() == "scissor":
-                score[0] += 1
-                print("You Win!")
-        elif user == "paper":
-            if animation.render() == "rock":
-                score[0] += 1
-                print("You Win!")
-            elif animation.render() == "scissor":
-                score[1] += 1
-                print("Computer Wins!")
-        elif user == "scissor":
-            if animation.render() == "rock":
-                score[1] += 1
-                print("Computer Wins!")
-            elif animation.render() == "paper":
-                score[0] += 1
-                print("You Win!")
 
+    animation.render()
+    result.janken()
     pygame.display.update()
     clock.tick(60)
 
